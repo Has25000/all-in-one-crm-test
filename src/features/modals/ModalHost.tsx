@@ -7,6 +7,8 @@ import { MyCardModal } from "./MyCardModal";
 import { ScheduleModal } from "./ScheduleModal";
 import { CaptureModal } from "../events/CaptureModal";
 import { NetworkEventModal } from "../events/NetworkEventModal";
+import { OpportunityDetailModal } from "../opportunities/OpportunityDetailModal";
+import { LogActivityModal } from "./LogActivityModal";
 
 export function ModalHost() {
   return (
@@ -20,6 +22,8 @@ export function ModalHost() {
       <ScheduleModal />
       <CaptureModal />
       <NetworkEventModal />
+      <OpportunityDetailModal />
+      <LogActivityModal />
     </>
   );
 }

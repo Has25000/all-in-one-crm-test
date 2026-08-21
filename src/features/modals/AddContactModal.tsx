@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { CheckCircle2, Contact, CreditCard, Link, PenLine } from "lucide-react";
+import { CheckCircle2, Contact, CreditCard, Link, PenLine, Sheet } from "lucide-react";
 import { Modal } from "../../components/ui/Modal";
 import { Button } from "../../components/ui/Button";
 import { useDemoState } from "../../state/DemoState";
 
-type Method = "linkedin" | "card" | "phone" | "manual";
+type Method = "linkedin" | "card" | "phone" | "manual" | "csv";
 
 const methods: {
   id: Method;
@@ -18,6 +18,7 @@ const methods: {
   { id: "card", icon: CreditCard, title: "Business Card", copy: "Scan or upload a card", action: "Upload" },
   { id: "phone", icon: Contact, title: "Phone Contact", copy: "Import from contacts", action: "Connect" },
   { id: "manual", icon: PenLine, title: "Add Manually", copy: "Create a contact", action: "Add details" },
+  { id: "csv", icon: Sheet, title: "Import a list", copy: "Spreadsheet or CRM export", action: "Choose file" },
 ];
 
 /**
@@ -50,7 +51,40 @@ export function AddContactModal() {
       description="However you meet someone, they end up in the same place."
       width="620px"
     >
-      {done ? (
+      {done === "csv" ? (
+        <div className="py-2">
+          <div className="flex items-start gap-3 rounded-[12px] border border-[color:var(--asbm-success)]/25 bg-forest-light px-4 py-4">
+            <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-[color:var(--asbm-success)]" aria-hidden />
+            <div>
+              <p className="text-[14px] font-semibold text-ink">142 rows read</p>
+              <p className="mt-0.5 text-[13px] text-charcoal">
+                Columns were matched automatically and duplicates merged rather than doubled up.
+              </p>
+            </div>
+          </div>
+          <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-[13px]">
+            {[
+              ["Added", "134 people"],
+              ["Merged as duplicates", "6"],
+              ["Needs a look", "2 missing an organization"],
+              ["Tagged", "Imported · August 21"],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt className="text-[11.5px] text-muted">{label}</dt>
+                <dd className="font-medium text-ink">{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 text-[12px] text-muted">
+            No file was read. The import is illustrated with sample numbers.
+          </p>
+          <div className="mt-5 flex justify-end">
+            <Button variant="primary" onClick={() => handleClose(false)}>
+              Done
+            </Button>
+          </div>
+        </div>
+      ) : done ? (
         <div className="py-2">
           <div className="flex items-start gap-3 rounded-[12px] border border-[color:var(--asbm-success)]/25 bg-forest-light px-4 py-4">
             <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-[color:var(--asbm-success)]" aria-hidden />

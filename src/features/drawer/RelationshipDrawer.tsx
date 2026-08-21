@@ -48,7 +48,7 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
  * them, the history, who else they connect to, and what is owed next.
  */
 export function RelationshipDrawer() {
-  const { drawerPersonId, closeDrawer, openDrawer, openModal } = useDemoState();
+  const { drawerPersonId, closeDrawer, openDrawer, openModal, loggedActivity } = useDemoState();
   const person = drawerPersonId ? getPerson(drawerPersonId) : undefined;
 
   if (!person) return <Drawer open={false} onOpenChange={closeDrawer} title="Relationship"><div /></Drawer>;
@@ -61,6 +61,7 @@ export function RelationshipDrawer() {
   const openTasks = tasksForPerson(person.id);
   const asClient = getClientForPerson(person.id);
   const touch = touchStatus(person);
+  const sessionLog = loggedActivity.filter((a) => a.personId === person.id);
   const events = eventsInvolving(person.id);
 
   const quickAction = (title: string, body: string) => openModal({ kind: "quick-action", title, body });
@@ -93,12 +94,10 @@ export function RelationshipDrawer() {
           <Button
             size="sm"
             variant="ghost"
-            onClick={() =>
-              quickAction("Add a note", `Notes added here would attach to ${person.name}'s relationship history.`)
-            }
+            onClick={() => openModal({ kind: "log-activity", personId: person.id })}
           >
             <NotebookPen size={14} aria-hidden />
-            Note
+            Log
           </Button>
           <Button
             size="sm"
@@ -273,9 +272,24 @@ export function RelationshipDrawer() {
       )}
 
       {/* Recent activity */}
-      {history.length > 0 && (
+      {(history.length > 0 || sessionLog.length > 0) && (
         <Section title="Recent activity">
           <ul className="space-y-3">
+            {sessionLog.map((entry) => (
+              <li key={entry.id} className="flex gap-3">
+                <span className="w-[52px] shrink-0 pt-px text-[11.5px] font-medium text-muted tabular-nums">
+                  {formatDate(entry.date)}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[12.5px] font-medium text-ink">
+                    {entry.type === "note" ? "Note" : `Logged ${entry.type}`}
+                  </span>
+                  <span className="block text-[11.5px] leading-snug text-muted">
+                    {entry.summary}
+                  </span>
+                </span>
+              </li>
+            ))}
             {history.slice(0, 4).map((entry) => (
               <li key={entry.id} className="flex gap-3">
                 <span className="w-[52px] shrink-0 pt-px text-[11.5px] font-medium text-muted tabular-nums">

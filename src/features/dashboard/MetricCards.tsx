@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { networkStats } from "../../data/activity";
 import { useDemoState } from "../../state/DemoState";
-import { isDueToday, sortedTasks } from "../../data/selectors";
+import { formatMoney, isDueToday, opportunities, sortedTasks } from "../../data/selectors";
 
 export function MetricCards() {
   const navigate = useNavigate();
@@ -11,11 +11,15 @@ export function MetricCards() {
   const open = sortedTasks().filter((t) => !completedTaskIds.includes(t.id));
   const dueToday = open.filter((t) => isDueToday(t.dueDate)).length;
 
+  // Read straight off the board so the headline can never drift from it.
+  const openOpportunities = opportunities.filter((o) => o.stage !== "complete");
+  const potential = openOpportunities.reduce((sum, o) => sum + (o.potentialValue ?? 0), 0);
+
   const metrics = [
     { label: "Relationships", value: networkStats.totalRelationships.toString(), sub: `+${networkStats.addedThisMonth} this month`, to: "/network" },
     { label: "Clients", value: networkStats.clients.toString(), sub: networkStats.clientBreakdown, to: "/clients" },
     { label: "Follow-ups", value: open.length.toString(), sub: `${dueToday} due today`, to: "/outreach" },
-    { label: "Active Opportunities", value: networkStats.activeOpportunities.toString(), sub: networkStats.potentialLabel, to: "/clients" },
+    { label: "Open Opportunities", value: openOpportunities.length.toString(), sub: `${formatMoney(potential)} potential`, to: "/opportunities" },
   ];
 
   return (

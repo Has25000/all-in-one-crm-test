@@ -105,12 +105,31 @@ export type Opportunity = {
   id: string;
   title: string;
   organization: string;
+  organizationId?: string;
   clientIds: string[];
   contactIds: string[];
   stage: OpportunityStage;
   nextAction: string;
   kind: string;
   potentialValue?: number;
+  /** How sure Sydney is, 0-100. Drives the weighted view. */
+  confidence?: number;
+  owner: string;
+  /** When a decision is expected, not when money lands. */
+  expectedDate?: string;
+  openedAt: string;
+  lastActivity?: string;
+  priority: "high" | "medium" | "low";
+};
+
+export type RecordActivity = {
+  id: string;
+  opportunityId?: string;
+  personId?: string;
+  type: "call" | "email" | "meeting" | "note" | "stage";
+  date: string;
+  summary: string;
+  author: string;
 };
 
 export type DemoDocument = {

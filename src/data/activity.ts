@@ -45,8 +45,6 @@ export const networkStats = {
   clientBreakdown: "6 athletes · 2 brands",
   followUps: 12,
   dueToday: 4,
-  activeOpportunities: 7,
-  potentialLabel: "$185K potential",
   health: [
     { key: "strong", label: "Strong", value: 92 },
     { key: "active", label: "Active", value: 174 },

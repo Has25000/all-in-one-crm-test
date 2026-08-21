@@ -13,7 +13,9 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[var(--radius-card)] border border-line bg-paper shadow-[var(--shadow-card)]",
+        // min-w-0 so a wide table inside can scroll rather than stretching the
+        // card past its grid or flex parent on narrow screens.
+        "min-w-0 rounded-[var(--radius-card)] border border-line bg-paper shadow-[var(--shadow-card)]",
         padded && "p-5",
         className,
       )}

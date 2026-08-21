@@ -38,6 +38,19 @@ Then open http://localhost:5173.
 - What actually came out of the last event, including the relationship that went
   quiet because nothing followed the handshake.
 
+**Tracking the work**
+
+- An opportunities board with drag-and-drop stage columns, plus table and
+  timeline views over the same records — arrow keys move a card too, so
+  dragging is never the only way.
+- Group by stage, client, or type; filter, sort, and search.
+- A full record per opportunity: stage, owner, confidence, decision date,
+  weighted value, the people it depends on, the clients it serves, files, and a
+  complete activity log.
+- Log a call, email, meeting, or note against any person or record.
+- CSV export from the board and the network list — real, working, to the
+  clipboard — and a CSV import path when someone arrives with a spreadsheet.
+
 **Keeping it up**
 
 - Keep-in-touch windows per relationship tier, and who has slipped past theirs.
@@ -58,7 +71,8 @@ src/
   state/       the one reducer holding demo interactivity
   components/  ASBM design primitives and the app shell
   features/    graph, relationship drawer, modals, dashboard cards
-  pages/       Home, Network, Clients, Calendar, Events, Outreach, Documents
+  pages/       Home, Network, Clients, Opportunities, Calendar, Events,
+               Outreach, Documents
   styles/      theme.css — the entire colour palette lives here
 ```
 
@@ -74,6 +88,14 @@ The demo runs on a pinned clock (`src/data/today.ts`) so relative phrases like
 Sydney Anderson, Larry Ogunjobi, Alaina Coates, and Dakereon Joyner appear by
 name and public association only. Every operational detail attributed to them
 here is fictional. All other people, organizations, and figures are invented.
+
+## A note on vocabulary
+
+The board mechanics are the ones any CRM user expects, but the language
+deliberately is not. There are no leads, prospects, funnels, or close rates
+here — only people, relationships, introductions, conversations, and
+opportunities. Sydney's business runs on relationships, and the wording should
+never make her feel like she is working a pipeline.
 
 ## Brand
 

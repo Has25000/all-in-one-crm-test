@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { LayoutList, Search, Share2 } from "lucide-react";
+import { Check, Download, LayoutList, Search, Share2 } from "lucide-react";
 import { Card, PageHeader } from "../components/ui/Card";
+import { Button } from "../components/ui/Button";
 import { Chip, FilterChip } from "../components/ui/Chip";
 import { Avatar } from "../components/ui/Avatar";
 import { StrengthDot } from "../components/ui/StrengthDot";
@@ -13,9 +14,12 @@ import { SYDNEY_ID } from "../data/people";
 import { cn } from "../components/ui/cn";
 import {
   daysSince,
+  formatDate,
   lastInteractionShort,
   people,
   sortedTasks,
+  strengthMeta,
+  toCsv,
 } from "../data/selectors";
 import type { Category } from "../data/types";
 
@@ -47,6 +51,7 @@ export function NetworkPage() {
   const [view, setView] = useState<"list" | "graph">("list");
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const followUpIds = useMemo(() => new Set(sortedTasks().map((t) => t.personId)), []);
 
@@ -131,6 +136,32 @@ export function NetworkPage() {
               />
             ))}
           </div>
+
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => {
+              const csv = toCsv(
+                ["Name", "Organization", "Role", "Relationship", "Connected through", "Last interaction", "Email", "Location"],
+                rows.map((p) => [
+                  p.name,
+                  p.organization ?? "",
+                  p.title,
+                  strengthMeta[p.relationshipStrength].label,
+                  p.connectedThrough ?? "Direct",
+                  p.lastInteraction ? formatDate(p.lastInteraction, "yyyy-MM-dd") : "Never",
+                  p.email ?? "",
+                  p.location ?? "",
+                ]),
+              );
+              void navigator.clipboard?.writeText(csv);
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1800);
+            }}
+          >
+            {copied ? <Check size={14} aria-hidden /> : <Download size={14} aria-hidden />}
+            {copied ? "Copied as CSV" : "Export"}
+          </Button>
         </div>
 
         <div className="mt-4">

@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { Card, PageHeader, SectionHeader } from "../components/ui/Card";
+import { Button } from "../components/ui/Button";
 import { ClientCard } from "../features/clients/ClientCard";
 import { OpportunityCard } from "../features/opportunities/OpportunityCard";
 import { clients, opportunities } from "../data/selectors";
 
 export function ClientsPage() {
+  const navigate = useNavigate();
   const athletes = clients.filter((c) => c.type === "athlete");
   const brands = clients.filter((c) => c.type === "brand");
 
@@ -37,6 +40,11 @@ export function ClientsPage() {
         <SectionHeader
           title="Opportunities across clients"
           subtitle="Every open conversation, and the relationship it depends on."
+          action={
+            <Button size="sm" variant="secondary" onClick={() => navigate("/opportunities")}>
+              Open board
+            </Button>
+          }
         />
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {opportunities.map((opportunity) => (

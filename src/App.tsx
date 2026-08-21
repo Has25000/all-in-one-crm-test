@@ -6,6 +6,7 @@ import { ModalHost } from "./features/modals/ModalHost";
 import { Dashboard } from "./pages/Dashboard";
 import { NetworkPage } from "./pages/NetworkPage";
 import { ClientsPage } from "./pages/ClientsPage";
+import { OpportunitiesPage } from "./pages/OpportunitiesPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { EventsPage } from "./pages/EventsPage";
 import { OutreachPage } from "./pages/OutreachPage";
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/network" element={<NetworkPage />} />
           <Route path="/clients" element={<ClientsPage />} />
+          <Route path="/opportunities" element={<OpportunitiesPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/outreach" element={<OutreachPage />} />

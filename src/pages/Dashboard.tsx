@@ -78,6 +78,11 @@ export function Dashboard() {
         <SectionHeader
           title="Opportunities"
           subtitle="Where relationships are turning into work."
+          action={
+            <Button size="sm" variant="secondary" onClick={() => navigate("/opportunities")}>
+              Open board
+            </Button>
+          }
         />
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {opportunities.slice(0, 3).map((opportunity) => (

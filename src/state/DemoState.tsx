@@ -6,7 +6,13 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import type { CapturedContact, Category, TimeSlot } from "../data/types";
+import type {
+  CapturedContact,
+  Category,
+  OpportunityStage,
+  RecordActivity,
+  TimeSlot,
+} from "../data/types";
 import { automations } from "../data/automations";
 
 /**
@@ -28,7 +34,9 @@ export type ModalState =
   | { kind: "my-card" }
   | { kind: "schedule"; personId: string }
   | { kind: "capture"; eventId: string }
-  | { kind: "network-event"; eventId: string };
+  | { kind: "network-event"; eventId: string }
+  | { kind: "opportunity"; opportunityId: string }
+  | { kind: "log-activity"; personId?: string; opportunityId?: string };
 
 export type ProposedMeeting = { personId: string; slot: TimeSlot };
 
@@ -43,6 +51,10 @@ type State = {
   /** Which automations are switched on. */
   automationState: Record<string, boolean>;
   proposedMeetings: ProposedMeeting[];
+  /** Stage moves made on the board this session. */
+  stageOverrides: Record<string, OpportunityStage>;
+  /** Calls, emails, and notes logged this session. */
+  loggedActivity: RecordActivity[];
 };
 
 type Action =
@@ -57,7 +69,9 @@ type Action =
   | { type: "capture-contact"; contact: CapturedContact }
   | { type: "update-capture"; id: string; changes: Partial<CapturedContact> }
   | { type: "toggle-automation"; automationId: string }
-  | { type: "propose-meeting"; meeting: ProposedMeeting };
+  | { type: "propose-meeting"; meeting: ProposedMeeting }
+  | { type: "move-stage"; opportunityId: string; stage: OpportunityStage }
+  | { type: "log-activity"; activity: RecordActivity };
 
 const initialState: State = {
   drawerPersonId: null,
@@ -68,6 +82,8 @@ const initialState: State = {
   captured: [],
   automationState: Object.fromEntries(automations.map((a) => [a.id, a.defaultOn])),
   proposedMeetings: [],
+  stageOverrides: {},
+  loggedActivity: [],
 };
 
 function reducer(state: State, action: Action): State {
@@ -116,6 +132,13 @@ function reducer(state: State, action: Action): State {
       };
     case "propose-meeting":
       return { ...state, proposedMeetings: [...state.proposedMeetings, action.meeting] };
+    case "move-stage":
+      return {
+        ...state,
+        stageOverrides: { ...state.stageOverrides, [action.opportunityId]: action.stage },
+      };
+    case "log-activity":
+      return { ...state, loggedActivity: [action.activity, ...state.loggedActivity] };
     default:
       return state;
   }
@@ -134,6 +157,8 @@ type DemoContextValue = State & {
   updateCapture: (id: string, changes: Partial<CapturedContact>) => void;
   toggleAutomation: (automationId: string) => void;
   proposeMeeting: (meeting: ProposedMeeting) => void;
+  moveStage: (opportunityId: string, stage: OpportunityStage) => void;
+  logActivity: (activity: RecordActivity) => void;
   isTaskComplete: (taskId: string) => boolean;
 };
 
@@ -170,6 +195,15 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
     (meeting: ProposedMeeting) => dispatch({ type: "propose-meeting", meeting }),
     [],
   );
+  const moveStage = useCallback(
+    (opportunityId: string, stage: OpportunityStage) =>
+      dispatch({ type: "move-stage", opportunityId, stage }),
+    [],
+  );
+  const logActivity = useCallback(
+    (activity: RecordActivity) => dispatch({ type: "log-activity", activity }),
+    [],
+  );
 
   const value = useMemo<DemoContextValue>(
     () => ({
@@ -186,6 +220,8 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       updateCapture,
       toggleAutomation,
       proposeMeeting,
+      moveStage,
+      logActivity,
       isTaskComplete: (taskId: string) => state.completedTaskIds.includes(taskId),
     }),
     [
@@ -202,6 +238,8 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       updateCapture,
       toggleAutomation,
       proposeMeeting,
+      moveStage,
+      logActivity,
     ],
   );
 

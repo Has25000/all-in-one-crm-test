@@ -5,7 +5,7 @@ import { organizations, organizationById } from "./organizations";
 import { clients, clientById, clientByPersonId } from "./clients";
 import { relationships, relationshipLabel } from "./relationships";
 import { interactions } from "./interactions";
-import { opportunities } from "./opportunities";
+import { opportunities, recordActivity, stageOrder } from "./opportunities";
 import { documents } from "./documents";
 import { calendarEvents } from "./calendar";
 import { tasks } from "./tasks";
@@ -16,6 +16,7 @@ import type {
   DemoDocument,
   NetworkEvent,
   Opportunity,
+  OpportunityStage,
   Person,
   Relationship,
   Strength,
@@ -397,3 +398,43 @@ export const slotLabel = (slot: TimeSlot) =>
   `${format(parseISO(slot.date), "EEEE, MMM d")} · ${formatHour(slot.start)}`;
 
 export { networkEvents };
+
+/* ------------------------------------------------------------------ *
+ * Opportunity records
+ * ------------------------------------------------------------------ */
+
+export const getOpportunity = (id: string) => opportunities.find((o) => o.id === id);
+
+export const activityForOpportunity = (opportunityId: string) =>
+  recordActivity
+    .filter((a) => a.opportunityId === opportunityId)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+export const activityForPerson = (personId: string) =>
+  recordActivity
+    .filter((a) => a.personId === personId)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+/** Value adjusted for how sure Sydney actually is. */
+export const weightedValue = (opportunity: Opportunity) =>
+  Math.round(((opportunity.potentialValue ?? 0) * (opportunity.confidence ?? 0)) / 100);
+
+export const formatMoney = (value: number) =>
+  value >= 1000 ? `$${Math.round(value / 1000)}K` : `$${value}`;
+
+export const stageIndex = (stage: OpportunityStage) => stageOrder.indexOf(stage);
+
+/* ------------------------------------------------------------------ *
+ * Export
+ *
+ * Whatever is on screen can leave as a spreadsheet — the one thing every CRM
+ * is expected to do and the reason nobody feels locked in.
+ * ------------------------------------------------------------------ */
+
+export const toCsv = (headers: string[], rows: (string | number | undefined)[][]) => {
+  const escape = (cell: string | number | undefined) => {
+    const value = cell === undefined || cell === null ? "" : String(cell);
+    return /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+  };
+  return [headers, ...rows].map((row) => row.map(escape).join(",")).join("\n");
+};

@@ -5,17 +5,21 @@ import { getClient, getPerson } from "../../data/selectors";
 import type { Opportunity } from "../../data/types";
 
 export function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
-  const { openDrawer } = useDemoState();
+  const { openDrawer, openModal } = useDemoState();
   const client = opportunity.clientIds.map(getClient).filter(Boolean)[0];
   const contact = opportunity.contactIds.map(getPerson).filter(Boolean)[0];
 
   return (
     <article className="flex flex-col rounded-[12px] border border-line bg-paper p-4">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <button
+          type="button"
+          onClick={() => openModal({ kind: "opportunity", opportunityId: opportunity.id })}
+          className="min-w-0 text-left"
+        >
           <h3 className="truncate text-[14px] font-semibold text-ink">{opportunity.title}</h3>
           <p className="truncate text-[12.5px] text-muted">{opportunity.organization}</p>
-        </div>
+        </button>
         <Chip tone="gold">{stageLabel[opportunity.stage]}</Chip>
       </div>
 
