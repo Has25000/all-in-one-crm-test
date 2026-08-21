@@ -1,8 +1,9 @@
 name: Deploy to GitHub Pages
 
+# Actions is the tidier way to publish, but it needs Actions minutes available
+# on the account. While that is not the case, the site is deployed by pushing
+# the built output to the gh-pages branch instead (npm run deploy).
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -29,7 +30,7 @@ jobs:
       - run: npm ci
 
       - name: Type-check and build
-        run: npm run build
+        run: npm run build:pages
 
       # Creates the Pages site on first run so no manual setup is needed.
       - uses: actions/configure-pages@v5
