@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   ASBM palette — the single source of truth for colour.
+   An official ASBM visual identity could not be verified for this concept
+   demo, so every colour lives here and nowhere else. Replacing this block
+   re-themes the entire application.
+--------------------------------------------------------------------------- */
+:root {
+  --asbm-black: #121212;
+  --asbm-charcoal: #242424;
+  --asbm-cream: #f7f5f0;
+  --asbm-white: #ffffff;
+  --asbm-gold: #b89a60;
+  --asbm-gold-light: #e9dfc9;
+  --asbm-green: #183c36;
+  --asbm-muted: #737373;
+  --asbm-border: #e8e5df;
+  --asbm-success: #3d775d;
+  --asbm-warning: #b77a32;
+  --asbm-danger: #a95656;
+
+  /* Derived surfaces — still expressed through the palette above. */
+  --asbm-cream-deep: #efece4;
+  --asbm-green-light: #dfe8e4;
+  --asbm-warm-neutral: #cfc6b6;
+  --asbm-neutral-light: #ded9d0;
+}
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-ink: var(--asbm-black);
+  --color-charcoal: var(--asbm-charcoal);
+  --color-cream: var(--asbm-cream);
+  --color-cream-deep: var(--asbm-cream-deep);
+  --color-paper: var(--asbm-white);
+  --color-gold: var(--asbm-gold);
+  --color-gold-light: var(--asbm-gold-light);
+  --color-forest: var(--asbm-green);
+  --color-forest-light: var(--asbm-green-light);
+  --color-muted: var(--asbm-muted);
+  --color-line: var(--asbm-border);
+  --color-success: var(--asbm-success);
+  --color-warning: var(--asbm-warning);
+  --color-danger: var(--asbm-danger);
+  --color-warm-neutral: var(--asbm-warm-neutral);
+  --color-neutral-light: var(--asbm-neutral-light);
+
+  --radius-card: 14px;
+
+  --shadow-card: 0 1px 2px rgb(18 18 18 / 0.04), 0 1px 3px rgb(18 18 18 / 0.03);
+  --shadow-lift: 0 4px 12px rgb(18 18 18 / 0.06), 0 1px 3px rgb(18 18 18 / 0.04);
+  --shadow-overlay: 0 24px 60px rgb(18 18 18 / 0.18);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background: var(--asbm-cream);
+    color: var(--asbm-black);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--asbm-gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--asbm-gold-light);
+    color: var(--asbm-black);
+  }
+}
+
+@layer components {
+  /* Small uppercase label — used sparingly, per the type direction. */
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--asbm-muted);
+  }
+
+  .num-lg {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .scroll-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background: var(--asbm-border);
+    border-radius: 999px;
+  }
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* React Flow — strip the library's default chrome back to the ASBM surface. */
+.react-flow__attribution {
+  display: none;
+}
+.react-flow__controls {
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--asbm-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.react-flow__controls-button {
+  background: var(--asbm-white);
+  border-bottom: 1px solid var(--asbm-border);
+  color: var(--asbm-charcoal);
+  width: 28px;
+  height: 28px;
+}
+.react-flow__controls-button:hover {
+  background: var(--asbm-cream);
+}
+.react-flow__controls-button svg {
+  fill: currentColor;
+}
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+}
+.react-flow__node {
+  cursor: pointer;
+}
+.react-flow__edge-path {
+  transition: stroke 180ms ease, stroke-width 180ms ease;
+}
+
+@keyframes asbm-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes asbm-slide-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes asbm-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes asbm-pop-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.985); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
