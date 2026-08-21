@@ -67,7 +67,35 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </ul>
 
-      <div className="px-6 py-5">
+      <div className="px-3 pb-2">
+        <NavLink
+          to="/card"
+          onClick={onNavigate}
+          className={({ isActive }) =>
+            cn(
+              "flex items-center gap-2.5 rounded-[10px] border px-2.5 py-2 transition-colors duration-200",
+              isActive
+                ? "border-[color:var(--asbm-gold)] bg-gold-light"
+                : "border-line bg-cream/60 hover:bg-cream",
+            )
+          }
+        >
+          <span
+            aria-hidden
+            className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-semibold text-white"
+          >
+            SA
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-[12.5px] font-medium text-ink">
+              Sydney Anderson
+            </span>
+            <span className="block truncate text-[11px] text-muted">Your card</span>
+          </span>
+        </NavLink>
+      </div>
+
+      <div className="px-6 pb-5">
         <div className="eyebrow">Powered by</div>
         <div className="mt-1 text-[13px] font-medium text-charcoal">Trybl</div>
       </div>

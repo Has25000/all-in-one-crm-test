@@ -1,4 +1,5 @@
 import { Menu, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { GlobalSearch } from "./GlobalSearch";
@@ -51,15 +52,14 @@ export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
             <Plus size={15} aria-hidden />
             <span className="hidden sm:inline">Add Contact</span>
           </Button>
-          <button
-            type="button"
-            onClick={() => openModal({ kind: "my-card" })}
+          <Link
+            to="/card"
             aria-label="Your contact card"
             title="Your card — Sydney Anderson"
             className="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-forest text-[12.5px] font-semibold text-white transition-shadow duration-200 hover:shadow-[0_0_0_3px_var(--asbm-gold-light)]"
           >
             SA
-          </button>
+          </Link>
         </div>
       </div>
     </header>

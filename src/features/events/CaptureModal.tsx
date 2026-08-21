@@ -6,6 +6,7 @@ import {
   CreditCard,
   PenLine,
   ScanLine,
+  Share2,
   Sparkles,
   X,
 } from "lucide-react";
@@ -41,6 +42,7 @@ export function CaptureModal() {
     updateCapture,
     automationState,
     openDrawer,
+    openModal,
   } = useDemoState();
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -282,6 +284,23 @@ export function CaptureModal() {
                   </ul>
                 </div>
               )}
+
+              <div className="rounded-[10px] border border-line bg-cream/40 px-3 py-2.5">
+                <h3 className="eyebrow mb-1.5">Your side of it</h3>
+                <p className="text-[11.5px] leading-relaxed text-charcoal">
+                  Exchanging codes hands them your card at the same time, so neither of you is
+                  typing the other up afterwards.
+                </p>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-2"
+                  onClick={() => openModal({ kind: "share-card" })}
+                >
+                  <Share2 size={13} aria-hidden />
+                  Share your card
+                </Button>
+              </div>
 
               <div className="rounded-[10px] border border-line bg-cream/40 px-3 py-2.5">
                 <h3 className="eyebrow mb-1.5">Running while you're here</h3>

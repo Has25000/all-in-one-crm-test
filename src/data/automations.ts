@@ -142,17 +142,3 @@ export const automations: Automation[] = [
     defaultOn: true,
   },
 ];
-
-/** Sydney's own card — what she hands out. */
-export const myCard = {
-  name: "Sydney Anderson",
-  title: "Founder",
-  organization: "Anderson Sports and Brand Management",
-  location: "Charlotte, NC",
-  email: "sydney@example-demo.com",
-  phone: "Demo contact",
-  linkedin: "Demo profile",
-  website: "andersonsbm.example-demo.com",
-  bookingLink: "meet.example-demo.com/sydney",
-  focus: ["Athlete marketing", "Brand development", "Community relations"],
-};

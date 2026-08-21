@@ -31,12 +31,12 @@ export type ModalState =
   | { kind: "event"; eventId: string }
   | { kind: "quick-action"; title: string; body: string }
   | { kind: "client"; clientId: string }
-  | { kind: "my-card" }
   | { kind: "schedule"; personId: string }
   | { kind: "capture"; eventId: string }
   | { kind: "network-event"; eventId: string }
   | { kind: "opportunity"; opportunityId: string }
-  | { kind: "log-activity"; personId?: string; opportunityId?: string };
+  | { kind: "log-activity"; personId?: string; opportunityId?: string }
+  | { kind: "share-card"; personId?: string };
 
 export type ProposedMeeting = { personId: string; slot: TimeSlot };
 
@@ -55,6 +55,12 @@ type State = {
   stageOverrides: Record<string, OpportunityStage>;
   /** Calls, emails, and notes logged this session. */
   loggedActivity: RecordActivity[];
+  /** Which of Sydney's cards she is handing out. */
+  cardVariantId: string;
+  /** Per-field visibility on top of the chosen card. */
+  cardFieldOverrides: Record<string, boolean>;
+  /** People handed the card during this session. */
+  sessionShares: { id: string; to: string; method: string }[];
 };
 
 type Action =
@@ -71,7 +77,10 @@ type Action =
   | { type: "toggle-automation"; automationId: string }
   | { type: "propose-meeting"; meeting: ProposedMeeting }
   | { type: "move-stage"; opportunityId: string; stage: OpportunityStage }
-  | { type: "log-activity"; activity: RecordActivity };
+  | { type: "log-activity"; activity: RecordActivity }
+  | { type: "set-card-variant"; variantId: string }
+  | { type: "toggle-card-field"; field: string }
+  | { type: "record-share"; to: string; method: string };
 
 const initialState: State = {
   drawerPersonId: null,
@@ -84,6 +93,9 @@ const initialState: State = {
   proposedMeetings: [],
   stageOverrides: {},
   loggedActivity: [],
+  cardVariantId: "full",
+  cardFieldOverrides: {},
+  sessionShares: [],
 };
 
 function reducer(state: State, action: Action): State {
@@ -139,6 +151,24 @@ function reducer(state: State, action: Action): State {
       };
     case "log-activity":
       return { ...state, loggedActivity: [action.activity, ...state.loggedActivity] };
+    case "set-card-variant":
+      return { ...state, cardVariantId: action.variantId, cardFieldOverrides: {} };
+    case "toggle-card-field":
+      return {
+        ...state,
+        cardFieldOverrides: {
+          ...state.cardFieldOverrides,
+          [action.field]: state.cardFieldOverrides[action.field] === false,
+        },
+      };
+    case "record-share":
+      return {
+        ...state,
+        sessionShares: [
+          { id: `share-${state.sessionShares.length}`, to: action.to, method: action.method },
+          ...state.sessionShares,
+        ],
+      };
     default:
       return state;
   }
@@ -159,6 +189,9 @@ type DemoContextValue = State & {
   proposeMeeting: (meeting: ProposedMeeting) => void;
   moveStage: (opportunityId: string, stage: OpportunityStage) => void;
   logActivity: (activity: RecordActivity) => void;
+  setCardVariant: (variantId: string) => void;
+  toggleCardField: (field: string) => void;
+  recordShare: (to: string, method: string) => void;
   isTaskComplete: (taskId: string) => boolean;
 };
 
@@ -204,6 +237,18 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
     (activity: RecordActivity) => dispatch({ type: "log-activity", activity }),
     [],
   );
+  const setCardVariant = useCallback(
+    (variantId: string) => dispatch({ type: "set-card-variant", variantId }),
+    [],
+  );
+  const toggleCardField = useCallback(
+    (field: string) => dispatch({ type: "toggle-card-field", field }),
+    [],
+  );
+  const recordShare = useCallback(
+    (to: string, method: string) => dispatch({ type: "record-share", to, method }),
+    [],
+  );
 
   const value = useMemo<DemoContextValue>(
     () => ({
@@ -222,6 +267,9 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       proposeMeeting,
       moveStage,
       logActivity,
+      setCardVariant,
+      toggleCardField,
+      recordShare,
       isTaskComplete: (taskId: string) => state.completedTaskIds.includes(taskId),
     }),
     [
@@ -240,6 +288,9 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       proposeMeeting,
       moveStage,
       logActivity,
+      setCardVariant,
+      toggleCardField,
+      recordShare,
     ],
   );
 

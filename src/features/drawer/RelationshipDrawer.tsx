@@ -1,4 +1,11 @@
-import { CalendarPlus, FileText, MapPin, MessageSquare, NotebookPen, SquareCheck } from "lucide-react";
+import {
+  CalendarPlus,
+  FileText,
+  MapPin,
+  NotebookPen,
+  Share2,
+  SquareCheck,
+} from "lucide-react";
 import { Drawer } from "../../components/ui/Drawer";
 import { Avatar } from "../../components/ui/Avatar";
 import { Button } from "../../components/ui/Button";
@@ -76,12 +83,10 @@ export function RelationshipDrawer() {
           <Button
             size="sm"
             variant="ghost"
-            onClick={() =>
-              quickAction("Message drafted", `A message to ${person.name} would open here. Nothing is sent in this concept demo.`)
-            }
+            onClick={() => openModal({ kind: "share-card", personId: person.id })}
           >
-            <MessageSquare size={14} aria-hidden />
-            Message
+            <Share2 size={14} aria-hidden />
+            My card
           </Button>
           <Button
             size="sm"

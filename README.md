@@ -34,7 +34,10 @@ Then open http://localhost:5173.
   warm path to each one.
 - Live capture — badge, business card, code exchange, or typed — with the
   contact enriched, tagged to the room, and queued for follow-up on the spot.
-- A digital contact card with a real vCard export and a booking link.
+- Your own card, and the ability to hand it out: a public link and code, four
+  audience variants, per-field visibility, seven share routes, a real vCard and
+  a real email signature — plus who opened it, who saved it, and who sent
+  theirs back.
 - What actually came out of the last event, including the relationship that went
   quiet because nothing followed the handshake.
 
@@ -72,7 +75,7 @@ src/
   components/  ASBM design primitives and the app shell
   features/    graph, relationship drawer, modals, dashboard cards
   pages/       Home, Network, Clients, Opportunities, Calendar, Events,
-               Outreach, Documents
+               Outreach, Documents, Card, and the public card at /c/:slug
   styles/      theme.css — the entire colour palette lives here
 ```
 
@@ -88,6 +91,23 @@ The demo runs on a pinned clock (`src/data/today.ts`) so relative phrases like
 Sydney Anderson, Larry Ogunjobi, Alaina Coates, and Dakereon Joyner appear by
 name and public association only. Every operational detail attributed to them
 here is fictional. All other people, organizations, and figures are invented.
+
+## Sharing, not just storing
+
+Relationship management runs in both directions, so the card Sydney hands out
+gets the same weight as the records she keeps.
+
+`/card` is where she manages it: pick which version of herself a room gets
+(full, brand partners, media, conference), turn individual details on or off,
+copy the link or the code, and see who has it. `/c/sydney` is what the other
+person opens — a standalone page outside the app shell, because it lands on a
+stranger's phone. It carries Save contact, Book time, and a Send yours back
+field, which is the half that makes it an exchange rather than a handout.
+
+Two things there genuinely work rather than being mocked: **Copy contact file**
+emits a valid vCard built from whichever fields the chosen card shows, and
+**Copy signature** produces a real, pasteable email signature. Both change when
+the card does.
 
 ## A note on vocabulary
 

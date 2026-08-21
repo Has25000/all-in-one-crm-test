@@ -3,7 +3,7 @@ import { CalendarCheck, Check, Copy, Link2 } from "lucide-react";
 import { Modal } from "../../components/ui/Modal";
 import { Button } from "../../components/ui/Button";
 import { useDemoState } from "../../state/DemoState";
-import { myCard } from "../../data/automations";
+import { myCard } from "../../data/card";
 import { availableSlots, formatHour, getPerson, slotLabel } from "../../data/selectors";
 import { format, parseISO } from "date-fns";
 import type { TimeSlot } from "../../data/types";
