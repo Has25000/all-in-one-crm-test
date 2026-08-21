@@ -72,7 +72,7 @@ export function ClientDetailModal() {
           style={{ animation: "asbm-overlay-in 200ms ease" }}
         />
         <Dialog.Content
-          className="fixed top-1/2 left-1/2 z-50 flex h-[min(760px,92vh)] w-[min(960px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[16px] border border-line bg-paper shadow-[var(--shadow-overlay)] focus:outline-none"
+          className="fixed top-1/2 left-1/2 z-50 flex h-[min(690px,92vh)] w-[min(960px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[16px] border border-line bg-paper shadow-[var(--shadow-overlay)] focus:outline-none"
           style={{ animation: "asbm-pop-in 220ms cubic-bezier(0.2, 0.8, 0.3, 1)" }}
         >
           <header className="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 pb-5">
@@ -190,8 +190,9 @@ export function ClientDetailModal() {
                 <NetworkGraph
                   personIds={graphPeople}
                   orgIds={graphOrgs}
-                  height={380}
+                  height={356}
                   showFilters={false}
+                  highlightId={client.personId}
                 />
               </TabPanel>
 

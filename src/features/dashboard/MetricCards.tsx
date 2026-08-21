@@ -1,15 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { networkStats } from "../../data/activity";
-
-const metrics = [
-  { label: "Relationships", value: networkStats.totalRelationships.toString(), sub: `+${networkStats.addedThisMonth} this month`, to: "/network" },
-  { label: "Clients", value: networkStats.clients.toString(), sub: networkStats.clientBreakdown, to: "/clients" },
-  { label: "Follow-ups", value: networkStats.followUps.toString(), sub: `${networkStats.dueToday} due today`, to: "/outreach" },
-  { label: "Active Opportunities", value: networkStats.activeOpportunities.toString(), sub: networkStats.potentialLabel, to: "/clients" },
-];
+import { useDemoState } from "../../state/DemoState";
+import { isDueToday, sortedTasks } from "../../data/selectors";
 
 export function MetricCards() {
   const navigate = useNavigate();
+  const { completedTaskIds } = useDemoState();
+
+  // Follow-up counts move when one is completed, so the headline stays honest.
+  const open = sortedTasks().filter((t) => !completedTaskIds.includes(t.id));
+  const dueToday = open.filter((t) => isDueToday(t.dueDate)).length;
+
+  const metrics = [
+    { label: "Relationships", value: networkStats.totalRelationships.toString(), sub: `+${networkStats.addedThisMonth} this month`, to: "/network" },
+    { label: "Clients", value: networkStats.clients.toString(), sub: networkStats.clientBreakdown, to: "/clients" },
+    { label: "Follow-ups", value: open.length.toString(), sub: `${dueToday} due today`, to: "/outreach" },
+    { label: "Active Opportunities", value: networkStats.activeOpportunities.toString(), sub: networkStats.potentialLabel, to: "/clients" },
+  ];
 
   return (
     <div className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4">

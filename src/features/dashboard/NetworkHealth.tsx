@@ -53,12 +53,12 @@ export function NetworkHealth() {
         ))}
       </dl>
 
-      <p className="mt-5 flex-1 border-l-2 border-[color:var(--asbm-warning)] bg-cream/70 px-3 py-2.5 text-[13px] leading-relaxed text-charcoal">
+      <p className="mt-5 border-l-2 border-[color:var(--asbm-warning)] bg-cream/70 px-3 py-2.5 text-[13px] leading-relaxed text-charcoal">
         <strong className="font-semibold text-ink">{networkStats.neglected} high-value relationships</strong>{" "}
         haven't been contacted in 90+ days.
       </p>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-1 items-end">
         <Button size="sm" variant="secondary" onClick={() => navigate("/outreach")}>
           Review relationships
         </Button>

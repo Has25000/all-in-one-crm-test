@@ -1,10 +1,21 @@
 import type { ReactNode } from "react";
 import { cn } from "./cn";
 
-export function Table({ children, className }: { children: ReactNode; className?: string }) {
+export function Table({
+  children,
+  className,
+  minWidth = 720,
+}: {
+  children: ReactNode;
+  className?: string;
+  /** Below this the table scrolls sideways rather than crushing its columns. */
+  minWidth?: number;
+}) {
   return (
     <div className={cn("scroll-slim overflow-x-auto", className)}>
-      <table className="w-full min-w-[720px] border-collapse text-left">{children}</table>
+      <table className="w-full border-collapse text-left" style={{ minWidth }}>
+        {children}
+      </table>
     </div>
   );
 }

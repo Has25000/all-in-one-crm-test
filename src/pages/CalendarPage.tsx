@@ -54,6 +54,7 @@ function EventChip({
 }) {
   const style = CATEGORY_STYLE[event.category];
   const person = event.participantIds.map(getPerson).filter(Boolean)[0];
+  const short = event.end - event.start <= 0.5;
 
   return (
     <button
@@ -65,7 +66,10 @@ function EventChip({
       <span aria-hidden className="mt-0.5 h-full w-[3px] shrink-0 self-stretch rounded-full" style={{ background: style.bar }} />
       <span className="min-w-0 flex-1">
         <span
-          className="block truncate text-[11px] leading-tight font-semibold"
+          className={cn(
+            "block text-[11px] leading-tight font-semibold",
+            dense || short ? "truncate" : "line-clamp-2",
+          )}
           style={{ color: style.text }}
         >
           {event.title}
@@ -93,7 +97,7 @@ function TimeGrid({ days, onOpen }: { days: Date[]; onOpen: (id: string) => void
       <div className="min-w-[680px]">
         <div
           className="grid border-b border-line"
-          style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+          style={{ gridTemplateColumns: `70px repeat(${days.length}, minmax(0, 1fr))` }}
         >
           <div />
           {days.map((day) => {
@@ -116,7 +120,7 @@ function TimeGrid({ days, onOpen }: { days: Date[]; onOpen: (id: string) => void
 
         <div
           className="relative grid"
-          style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+          style={{ gridTemplateColumns: `70px repeat(${days.length}, minmax(0, 1fr))` }}
         >
           <div>
             {hours.map((hour) => (
@@ -125,7 +129,7 @@ function TimeGrid({ days, onOpen }: { days: Date[]; onOpen: (id: string) => void
                 className="relative border-b border-line pr-2 text-right"
                 style={{ height: HOUR_HEIGHT }}
               >
-                <span className="absolute -top-1.5 right-2 text-[10.5px] text-muted tabular-nums">
+                <span className="absolute -top-1.5 right-2 text-[10.5px] whitespace-nowrap text-muted tabular-nums">
                   {formatHour(hour)}
                 </span>
               </div>

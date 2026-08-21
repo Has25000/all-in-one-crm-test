@@ -62,12 +62,15 @@ export function NetworkGraph({
   height = 460,
   showFilters = true,
   interactive = true,
+  highlightId,
 }: {
   personIds: string[];
   orgIds: string[];
   height?: number;
   showFilters?: boolean;
   interactive?: boolean;
+  /** Ring this node — used when a graph is about one particular person. */
+  highlightId?: string;
 }) {
   const { graphFilter, setGraphFilter, openDrawer } = useDemoState();
   const filter = showFilters ? graphFilter : "all";
@@ -108,6 +111,7 @@ export function NetworkGraph({
           category: person.category,
           strength: person.relationshipStrength,
           dimmed: false,
+          highlighted: id === highlightId,
         },
       };
     });
@@ -125,7 +129,7 @@ export function NetworkGraph({
       });
 
     return [...personNodes, ...orgNodes];
-  }, [personIds, orgIds, positions]);
+  }, [personIds, orgIds, positions, highlightId]);
 
   const initialEdges = useMemo<Edge[]>(() => {
     const visible = new Set([...personIds, ...orgIds]);

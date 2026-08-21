@@ -63,7 +63,7 @@ export function GlobalSearch() {
 
       {showPanel && (
         <div
-          className="scroll-slim absolute top-[calc(100%+6px)] right-0 z-50 max-h-[420px] w-[380px] overflow-y-auto rounded-[12px] border border-line bg-paper shadow-[var(--shadow-overlay)]"
+          className="scroll-slim absolute top-[calc(100%+6px)] right-0 z-50 max-h-[420px] w-[min(380px,calc(100vw-2.5rem))] overflow-y-auto rounded-[12px] border border-line bg-paper shadow-[var(--shadow-overlay)]"
           style={{ animation: "asbm-fade-in 160ms ease" }}
         >
           {results.isEmpty ? (

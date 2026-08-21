@@ -10,6 +10,7 @@ export type PersonNodeData = {
   category: Category;
   strength: Strength;
   dimmed: boolean;
+  highlighted?: boolean;
 };
 
 export function PersonNode({ data, selected }: NodeProps) {
@@ -21,10 +22,11 @@ export function PersonNode({ data, selected }: NodeProps) {
       className="flex w-[196px] items-center gap-2.5 rounded-[12px] border bg-paper px-2.5 py-2 transition-[opacity,box-shadow,border-color] duration-200"
       style={{
         opacity: d.dimmed ? 0.22 : 1,
-        borderColor: selected ? "var(--asbm-gold)" : "var(--asbm-border)",
-        boxShadow: selected
-          ? "0 0 0 3px var(--asbm-gold-light), var(--shadow-lift)"
-          : "var(--shadow-card)",
+        borderColor: selected || d.highlighted ? "var(--asbm-gold)" : "var(--asbm-border)",
+        boxShadow:
+          selected || d.highlighted
+            ? "0 0 0 3px var(--asbm-gold-light), var(--shadow-lift)"
+            : "var(--shadow-card)",
       }}
     >
       <Handle type="target" position={Position.Left} isConnectable={false} />

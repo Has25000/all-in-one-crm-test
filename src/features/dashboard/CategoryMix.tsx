@@ -2,14 +2,15 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Card, SectionHeader } from "../../components/ui/Card";
 import { networkStats } from "../../data/activity";
 
+/** Seven on-palette colours, ordered so no two neighbours read the same. */
 const SLICE_TOKENS = [
   "var(--asbm-green)",
   "var(--asbm-gold)",
   "var(--asbm-charcoal)",
   "var(--asbm-warm-neutral)",
-  "var(--asbm-neutral-light)",
-  "var(--asbm-green-light)",
-  "var(--asbm-cream-deep)",
+  "var(--asbm-success)",
+  "var(--asbm-gold-light)",
+  "var(--asbm-muted)",
 ];
 
 /**

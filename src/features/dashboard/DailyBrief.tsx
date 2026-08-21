@@ -1,20 +1,25 @@
 import { ArrowRight } from "lucide-react";
 import { dailyBrief } from "../../data/activity";
 import { useDemoState } from "../../state/DemoState";
-
-const items = [
-  { value: dailyBrief.meetings, label: "meetings" },
-  { value: dailyBrief.followUps, label: "follow-ups" },
-  { value: dailyBrief.cooling, label: "relationships cooling" },
-  { value: dailyBrief.introductions, label: "potential introduction" },
-];
+import { isDueToday, sortedTasks } from "../../data/selectors";
 
 /**
  * The first thing Sydney sees: not how many people she knows, but what today
  * actually asks of her.
  */
 export function DailyBrief() {
-  const { openDrawer } = useDemoState();
+  const { openDrawer, completedTaskIds } = useDemoState();
+
+  const dueToday = sortedTasks().filter(
+    (t) => !completedTaskIds.includes(t.id) && isDueToday(t.dueDate),
+  ).length;
+
+  const items = [
+    { value: dailyBrief.meetings, label: "meetings" },
+    { value: dueToday, label: dueToday === 1 ? "follow-up" : "follow-ups" },
+    { value: dailyBrief.cooling, label: "relationships cooling" },
+    { value: dailyBrief.introductions, label: "potential introduction" },
+  ];
 
   return (
     <section className="rounded-[var(--radius-card)] border border-line bg-ink px-5 py-3.5 text-white">

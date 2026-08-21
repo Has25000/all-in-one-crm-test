@@ -117,9 +117,9 @@ export function DocumentsPage() {
         subtitle="Every important file connected to the people and clients it belongs to."
       />
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,2.35fr)_minmax(0,1fr)]">
         <Card>
-          <Table>
+          <Table minWidth={690}>
             <thead>
               <tr>
                 <Th>Document</Th>
@@ -156,7 +156,7 @@ export function DocumentsPage() {
                     <Td>
                       <Chip tone="warm">{doc.type}</Chip>
                     </Td>
-                    <Td className="text-muted tabular-nums">{formatDate(doc.updatedAt)}</Td>
+                    <Td className="whitespace-nowrap text-muted tabular-nums">{formatDate(doc.updatedAt)}</Td>
                     <Td className="text-muted">{doc.owner}</Td>
                   </Tr>
                 );

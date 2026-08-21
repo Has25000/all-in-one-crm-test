@@ -28,10 +28,8 @@ function PersonCell({ personId }: { personId: string }) {
     <span className="flex items-center gap-2.5">
       <Avatar name={person.name} category={person.category} size="sm" />
       <span className="min-w-0">
-        <span className="block truncate font-medium text-ink">{person.name}</span>
-        <span className="block truncate text-[11.5px] text-muted">
-          {person.organization ?? person.title}
-        </span>
+        <span className="block truncate font-medium whitespace-nowrap text-ink">{person.name}</span>
+        <span className="block truncate text-[11.5px] text-muted">{person.title}</span>
       </span>
     </span>
   );
@@ -57,7 +55,7 @@ export function OutreachPage() {
           subtitle={`${outstanding.length} open · these are people, not a pipeline.`}
         />
         <div className="mt-4">
-          <Table>
+          <Table minWidth={980}>
             <thead>
               <tr>
                 <Th>Person</Th>
@@ -84,11 +82,11 @@ export function OutreachPage() {
                         <PersonCell personId={person.id} />
                       </button>
                     </Td>
-                    <Td className="text-charcoal">{person.organization ?? "—"}</Td>
+                    <Td className="whitespace-nowrap text-charcoal">{person.organization ?? "—"}</Td>
                     <Td>
                       <StrengthDot strength={person.relationshipStrength} />
                     </Td>
-                    <Td className="text-charcoal tabular-nums">
+                    <Td className="whitespace-nowrap text-charcoal tabular-nums">
                       {lastInteractionShort(person.lastInteraction)}
                       {days !== undefined && days > 0 ? " ago" : ""}
                     </Td>

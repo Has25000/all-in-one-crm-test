@@ -141,7 +141,7 @@ export function NetworkPage() {
               <p className="mb-2 text-[12.5px] text-muted">
                 Showing {rows.length} of {people.length - 1} seeded relationships.
               </p>
-              <Table>
+              <Table minWidth={980}>
                 <thead>
                   <tr>
                     <Th>Person</Th>
@@ -165,16 +165,16 @@ export function NetworkPage() {
                         <Td>
                           <span className="flex items-center gap-2.5">
                             <Avatar name={person.name} category={person.category} size="sm" />
-                            <span className="font-medium text-ink">{person.name}</span>
+                            <span className="font-medium whitespace-nowrap text-ink">{person.name}</span>
                           </span>
                         </Td>
-                        <Td className="text-charcoal">{person.organization ?? "—"}</Td>
+                        <Td className="whitespace-nowrap text-charcoal">{person.organization ?? "—"}</Td>
                         <Td className="text-muted">{person.title}</Td>
                         <Td>
                           <StrengthDot strength={person.relationshipStrength} />
                         </Td>
                         <Td className="text-muted">{person.connectedThrough ?? "Direct"}</Td>
-                        <Td className={cn("tabular-nums", days && days > 60 ? "text-[color:var(--asbm-warning)]" : "text-charcoal")}>
+                        <Td className={cn("whitespace-nowrap tabular-nums", days && days > 60 ? "text-[color:var(--asbm-warning)]" : "text-charcoal")}>
                           {lastInteractionShort(person.lastInteraction)}
                           {days !== undefined && days > 0 ? " ago" : ""}
                         </Td>

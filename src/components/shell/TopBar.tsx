@@ -42,12 +42,17 @@ export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
 
         <div className="flex items-center gap-3">
           <GlobalSearch />
-          <Button variant="primary" onClick={() => openModal({ kind: "add-contact" })}>
+          <Button
+            variant="primary"
+            aria-label="Add Contact"
+            onClick={() => openModal({ kind: "add-contact" })}
+            className="px-3 sm:px-4"
+          >
             <Plus size={15} aria-hidden />
-            Add Contact
+            <span className="hidden sm:inline">Add Contact</span>
           </Button>
           <span
-            className="flex size-9.5 items-center justify-center rounded-full bg-forest text-[12.5px] font-semibold text-white"
+            className="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-forest text-[12.5px] font-semibold text-white"
             title="Sydney Anderson"
           >
             SA
