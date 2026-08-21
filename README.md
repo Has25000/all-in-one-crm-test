@@ -7,6 +7,13 @@ Sydney Anderson and Anderson Sports and Brand Management.
 integrations. Every figure, date, note, file, and conversation is sample data
 created for demonstration purposes.
 
+## Live demo
+
+**https://has25000.github.io/all-in-one-crm-test/**
+
+Open it and take the walkthrough — fourteen steps, about two minutes. Every
+major screen and card also carries a small "?" that explains what it is.
+
 ## Running it
 
 ```bash
@@ -15,6 +22,20 @@ npm run dev
 ```
 
 Then open http://localhost:5173.
+
+## Publishing
+
+```bash
+npm run deploy
+```
+
+That builds with the repository subpath as its base and pushes the result to
+the `gh-pages` branch, which GitHub Pages serves. It needs no Actions minutes,
+which matters because Actions is currently unavailable on this account.
+
+`.github/workflows/deploy.yml` does the same job through GitHub Actions and is
+the tidier option once Actions is available again. It is set to manual dispatch
+so it does not fail on every push in the meantime.
 
 ## What it demonstrates
 
