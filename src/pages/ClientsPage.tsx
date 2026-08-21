@@ -16,6 +16,7 @@ export function ClientsPage() {
         title="Clients"
         meta={<span className="text-[14px] text-muted">{clients.length} active</span>}
         subtitle="Your athletes and brand clients, with their relationships, work, and schedule in the same system as everyone else."
+        explain="Clients are not a separate database. Open one for their priorities, the relationships around them drawn as a sub-graph, open opportunities, documents, and history — all from the same network."
       />
 
       <Card>

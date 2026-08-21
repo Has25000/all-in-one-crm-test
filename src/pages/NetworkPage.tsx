@@ -83,6 +83,7 @@ export function NetworkPage() {
           </span>
         }
         subtitle="Everyone you know, and how each of them connects to the rest of your work."
+        explain="The full contact book, as a list or as the graph. Filter by the kind of relationship, search, and export whatever is on screen. Every row opens the same relationship card the graph does."
         action={
           <div className="flex rounded-[10px] border border-line bg-paper p-0.5">
             {(

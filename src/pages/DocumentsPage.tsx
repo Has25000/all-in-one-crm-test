@@ -115,10 +115,11 @@ export function DocumentsPage() {
         title="Documents"
         meta={<span className="text-[14px] text-muted">{documents.length} files</span>}
         subtitle="Every important file connected to the people and clients it belongs to."
+        explain="Files hang off the relationships and work they belong to rather than sitting in folders. Select one to see its chain — file, client, contact, organisation — and click any hop to jump to that relationship."
       />
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,2.35fr)_minmax(0,1fr)]">
-        <Card>
+        <Card data-tour="documents-table">
           <Table minWidth={690}>
             <thead>
               <tr>

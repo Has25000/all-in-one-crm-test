@@ -15,6 +15,7 @@ import { StayInTouch } from "../features/dashboard/StayInTouch";
 import { ClientCard } from "../features/clients/ClientCard";
 import { OpportunityCard } from "../features/opportunities/OpportunityCard";
 import { NetworkGraph } from "../features/graph/NetworkGraph";
+import { TourInvite } from "../features/tour/TourInvite";
 import { CORE_ORG_IDS, CORE_PERSON_IDS } from "../features/graph/graphModel";
 import { clients, opportunities } from "../data/selectors";
 
@@ -23,18 +24,29 @@ export function Dashboard() {
 
   return (
     <div className="space-y-4">
-      <DailyBrief />
-      <MetricCards />
+      <TourInvite />
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+      <div data-tour="daily-brief">
+        <DailyBrief />
+      </div>
+
+      <div data-tour="metrics">
+        <MetricCards />
+      </div>
+
+      <div
+        data-tour="intelligence"
+        className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]"
+      >
         <RelationshipIntelligence />
         <TodaySchedule />
       </div>
 
-      <Card>
+      <Card data-tour="graph">
         <SectionHeader
           title="Your Network"
           subtitle="See how clients, brands, teams, media, and partners connect."
+          explain="Every person and organisation you know, drawn as one picture. You are the centre; colour tells you the kind of relationship. Drag nodes, filter by category, and hover a line to see what the connection actually is. Clicking anyone opens their full relationship card."
           action={
             <Button size="sm" variant="secondary" onClick={() => navigate("/network")}>
               Open network

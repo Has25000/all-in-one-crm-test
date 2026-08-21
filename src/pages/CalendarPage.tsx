@@ -250,6 +250,7 @@ export function CalendarPage() {
       <PageHeader
         title="Calendar"
         subtitle="Every meeting carries the relationship behind it — who you're seeing, which client it serves, and what was last discussed."
+        explain="Day, week, and month views over the same events. Clicking one gives you the brief rather than the time slot: who is in the room, the client it serves, what you last spoke about, and a way into their relationship card."
         action={
           <div className="flex rounded-[10px] border border-line bg-paper p-0.5">
             {(["day", "week", "month"] as View[]).map((value) => (

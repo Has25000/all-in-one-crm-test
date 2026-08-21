@@ -26,6 +26,7 @@ export function UpcomingEvents() {
       <SectionHeader
         title="Where you'll be"
         subtitle="Who you know in each room, before you get there."
+        explain="Rooms you are walking into next, and who from your network will be in them. Capture people on the spot rather than typing up a stack of cards afterwards."
         action={
           <Button size="sm" variant="secondary" onClick={() => navigate("/events")}>
             All events

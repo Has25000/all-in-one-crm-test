@@ -19,6 +19,7 @@ export function SuggestedConnections() {
       <SectionHeader
         title="Suggested Connections"
         subtitle="Paths through your network that could open something up."
+        explain="Second-degree paths worth acting on. Each chain shows who you would go through and why that person is the right route."
       />
 
       <ul className="mt-4 flex-1 space-y-3">

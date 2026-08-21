@@ -41,6 +41,7 @@ export function CardPage() {
       <PageHeader
         title="Your card"
         subtitle="Relationship management runs both ways. This is what you hand out, who has it, and what they did with it."
+        explain="Your own contact card. Choose which version a room gets, share it by link, code, tap, text, email, signature, or wallet, and see who opened it, saved it, or sent theirs back."
         action={
           <Button variant="primary" onClick={() => openModal({ kind: "share-card" })}>
             <Share2 size={15} aria-hidden />
@@ -128,7 +129,7 @@ export function CardPage() {
 
         {/* Sharing it */}
         <div className="min-w-0 space-y-5">
-          <Card>
+          <Card data-tour="card-share">
             <SectionHeader
               title="Your link"
               subtitle="One address that always shows your current details."

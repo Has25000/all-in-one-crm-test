@@ -26,6 +26,7 @@ export function EventsPage() {
         title="Events"
         meta={<span className="text-[14px] text-muted">{upcoming.length} coming up</span>}
         subtitle="Most relationships start in a room. This is who will be there, who is worth meeting, and what came out of the last one."
+        explain="Conferences, community days, and mixers, with the people you already know in each one. After an event, it shows what actually came of it — including anyone who has gone quiet since."
         action={
           next && (
             <Button
@@ -39,10 +40,11 @@ export function EventsPage() {
         }
       />
 
-      <Card>
+      <Card data-tour="events-list">
         <SectionHeader
           title="Coming up"
           subtitle="Decide what each room is for before you walk into it."
+          explain="Each event lists who from your network is going and who is worth getting to, along with the warm path to them. Open capture while you are there to add people in one tap."
         />
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {upcoming.map((event) => (

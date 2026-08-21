@@ -128,6 +128,7 @@ export function OpportunitiesPage() {
         title="Opportunities"
         meta={<span className="text-[14px] text-muted">{openItems.length} open</span>}
         subtitle="Every conversation that could turn into work, and the relationship each one rests on."
+        explain="A board of open work. Columns are stages — drag a card between them, or focus one and use the arrow keys. The same records appear as a table you can group and sort, and as a timeline of when each decision is expected. Deliberately not a sales pipeline: no leads, no forecasts you have to defend."
         action={
           <div className="flex rounded-[10px] border border-line bg-paper p-0.5">
             {VIEWS.map(({ value, label, icon: Icon }) => (
@@ -203,7 +204,7 @@ export function OpportunitiesPage() {
       </div>
 
       {/* The board */}
-      <Card>
+      <Card data-tour="opportunity-board">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="relative min-w-[200px] flex-1">
             <Search

@@ -20,6 +20,7 @@ export function AutomationsPanel() {
     <Card>
       <SectionHeader
         title="Running in the background"
+        explain="Rules that do the remembering: check-in nudges, cooling alerts, follow-up after an event, enrichment on capture, meeting prep briefs, and alerts when someone changes job. Toggle any of them — nothing actually runs in this concept demo."
         subtitle={`${activeCount} of ${automations.length} on — the admin you no longer have to remember.`}
       />
 

@@ -22,6 +22,7 @@ export function RelationshipIntelligence() {
       <SectionHeader
         title="Relationship Intelligence"
         subtitle="Important relationships that may need your attention."
+        explain="The part that makes the system feel like it is paying attention. It reads your history and surfaces what is worth acting on today — a strong relationship going quiet, a warm path to someone you want to meet, an event where the network could help."
       />
 
       <div className="mt-3.5 flex flex-1 flex-col gap-2.5">

@@ -16,7 +16,11 @@ export function NetworkHealth() {
 
   return (
     <Card className="flex h-full flex-col">
-      <SectionHeader title="Network Health" subtitle="How your relationships are holding up." />
+      <SectionHeader
+        title="Network Health"
+        subtitle="How your relationships are holding up."
+        explain="Four honest bands rather than a score. Strong, active, cooling, dormant — and one line about the high-value relationships that have gone too long without contact."
+      />
 
       <div
         className="mt-5 flex h-2.5 w-full overflow-hidden rounded-full"

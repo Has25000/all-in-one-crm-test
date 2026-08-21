@@ -48,6 +48,7 @@ export function OutreachPage() {
       <PageHeader
         title="Outreach"
         subtitle="Keep important relationships active without losing the personal touch."
+        explain="Who is owed a reply, who is going quiet, and the rules underneath that do the remembering. Drafting help is offered, but nothing sends itself — the personal touch is the point."
       />
 
       <Card>
@@ -197,7 +198,9 @@ export function OutreachPage() {
         </Card>
       </div>
 
-      <AutomationsPanel />
+      <div data-tour="automations">
+        <AutomationsPanel />
+      </div>
 
       <Card>
         <SectionHeader title="Recently Contacted" subtitle="Relationships that are already warm." />

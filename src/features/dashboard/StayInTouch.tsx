@@ -20,6 +20,7 @@ export function StayInTouch() {
     <Card className="flex h-full flex-col">
       <SectionHeader
         title="Past their window"
+        explain="Every relationship tier has a check-in window — strong every 30 days, active every 60, cooling every 90. This is who has slipped past theirs, worst first."
         subtitle={
           on
             ? `${overdue.length} have slipped past their check-in window.`

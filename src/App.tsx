@@ -3,6 +3,7 @@ import { AppShell } from "./components/shell/AppShell";
 import { DemoStateProvider } from "./state/DemoState";
 import { RelationshipDrawer } from "./features/drawer/RelationshipDrawer";
 import { ModalHost } from "./features/modals/ModalHost";
+import { GuidedTour } from "./features/tour/GuidedTour";
 import { Dashboard } from "./pages/Dashboard";
 import { NetworkPage } from "./pages/NetworkPage";
 import { ClientsPage } from "./pages/ClientsPage";
@@ -45,6 +46,7 @@ function Shell() {
       </AppShell>
       <RelationshipDrawer />
       <ModalHost />
+      <GuidedTour />
     </>
   );
 }

@@ -61,6 +61,9 @@ type State = {
   cardFieldOverrides: Record<string, boolean>;
   /** People handed the card during this session. */
   sessionShares: { id: string; to: string; method: string }[];
+  /** Index of the active walkthrough step, or null when the tour is closed. */
+  tourStep: number | null;
+  tourDismissed: boolean;
 };
 
 type Action =
@@ -80,7 +83,9 @@ type Action =
   | { type: "log-activity"; activity: RecordActivity }
   | { type: "set-card-variant"; variantId: string }
   | { type: "toggle-card-field"; field: string }
-  | { type: "record-share"; to: string; method: string };
+  | { type: "record-share"; to: string; method: string }
+  | { type: "set-tour-step"; step: number | null }
+  | { type: "dismiss-tour-invite" };
 
 const initialState: State = {
   drawerPersonId: null,
@@ -96,6 +101,8 @@ const initialState: State = {
   cardVariantId: "full",
   cardFieldOverrides: {},
   sessionShares: [],
+  tourStep: null,
+  tourDismissed: false,
 };
 
 function reducer(state: State, action: Action): State {
@@ -161,6 +168,10 @@ function reducer(state: State, action: Action): State {
           [action.field]: state.cardFieldOverrides[action.field] === false,
         },
       };
+    case "set-tour-step":
+      return { ...state, tourStep: action.step, tourDismissed: true };
+    case "dismiss-tour-invite":
+      return { ...state, tourDismissed: true };
     case "record-share":
       return {
         ...state,
@@ -192,6 +203,8 @@ type DemoContextValue = State & {
   setCardVariant: (variantId: string) => void;
   toggleCardField: (field: string) => void;
   recordShare: (to: string, method: string) => void;
+  setTourStep: (step: number | null) => void;
+  dismissTourInvite: () => void;
   isTaskComplete: (taskId: string) => boolean;
 };
 
@@ -249,6 +262,11 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
     (to: string, method: string) => dispatch({ type: "record-share", to, method }),
     [],
   );
+  const setTourStep = useCallback(
+    (step: number | null) => dispatch({ type: "set-tour-step", step }),
+    [],
+  );
+  const dismissTourInvite = useCallback(() => dispatch({ type: "dismiss-tour-invite" }), []);
 
   const value = useMemo<DemoContextValue>(
     () => ({
@@ -270,6 +288,8 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       setCardVariant,
       toggleCardField,
       recordShare,
+      setTourStep,
+      dismissTourInvite,
       isTaskComplete: (taskId: string) => state.completedTaskIds.includes(taskId),
     }),
     [
@@ -291,6 +311,8 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       setCardVariant,
       toggleCardField,
       recordShare,
+      setTourStep,
+      dismissTourInvite,
     ],
   );
 

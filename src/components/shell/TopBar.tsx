@@ -1,4 +1,4 @@
-import { Menu, Plus } from "lucide-react";
+import { Compass, Menu, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -14,7 +14,7 @@ const greetings: Record<string, { title: string; subtitle: string }> = {
 
 export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
   const { pathname } = useLocation();
-  const { openModal } = useDemoState();
+  const { openModal, setTourStep } = useDemoState();
   const greeting = greetings[pathname];
 
   return (
@@ -43,6 +43,16 @@ export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
 
         <div className="flex items-center gap-3">
           <GlobalSearch />
+          <Button
+            variant="secondary"
+            aria-label="Take the walkthrough"
+            title="Take the walkthrough"
+            onClick={() => setTourStep(0)}
+            className="px-3 sm:px-4"
+          >
+            <Compass size={15} aria-hidden />
+            <span className="hidden lg:inline">Walkthrough</span>
+          </Button>
           <Button
             variant="primary"
             aria-label="Add Contact"
