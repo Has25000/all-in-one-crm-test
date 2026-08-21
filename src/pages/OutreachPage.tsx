@@ -6,6 +6,7 @@ import { Chip } from "../components/ui/Chip";
 import { StrengthDot } from "../components/ui/StrengthDot";
 import { Table, Td, Th, Tr } from "../components/ui/Table";
 import { useDemoState } from "../state/DemoState";
+import { AutomationsPanel } from "../features/automations/AutomationsPanel";
 import {
   daysSince,
   dueLabel,
@@ -195,6 +196,8 @@ export function OutreachPage() {
           </ul>
         </Card>
       </div>
+
+      <AutomationsPanel />
 
       <Card>
         <SectionHeader title="Recently Contacted" subtitle="Relationships that are already warm." />

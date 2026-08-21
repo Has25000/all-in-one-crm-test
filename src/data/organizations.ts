@@ -23,6 +23,9 @@ export const organizations: Organization[] = [
   { id: "org-uptown", name: "Uptown Event Collective", kind: "professional", location: "Charlotte, NC", context: "Event production partner." },
   { id: "org-novant", name: "Novant Health Sports Medicine", kind: "professional", location: "Charlotte, NC", context: "Athlete health and community wellness partner." },
   { id: "org-salinas", name: "Salinas & Pike", kind: "professional", location: "Charlotte, NC", context: "Outside counsel for endorsement agreements." },
+  { id: "org-knights", name: "Charlotte Knights", kind: "team", location: "Charlotte, NC", context: "Sponsorship contact met at the Carolina Athlete Marketing Forum." },
+  { id: "org-truist", name: "Truist", kind: "brand", location: "Charlotte, NC", context: "Regional partnerships conversation that stalled after June." },
+  { id: "org-vuori", name: "Vuori", kind: "brand", location: "Carlsbad, CA", context: "Athlete relations interest in track and field." },
   { id: "org-qca", name: "Queen City Athletic", kind: "brand", location: "Charlotte, NC", context: "Brand client — regional apparel label." },
   { id: "org-kinetics", name: "Carolina Kinetics", kind: "brand", location: "Charlotte, NC", context: "Brand client — performance training studio." },
 ];

@@ -51,12 +51,15 @@ export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
             <Plus size={15} aria-hidden />
             <span className="hidden sm:inline">Add Contact</span>
           </Button>
-          <span
-            className="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-forest text-[12.5px] font-semibold text-white"
-            title="Sydney Anderson"
+          <button
+            type="button"
+            onClick={() => openModal({ kind: "my-card" })}
+            aria-label="Your contact card"
+            title="Your card — Sydney Anderson"
+            className="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-forest text-[12.5px] font-semibold text-white transition-shadow duration-200 hover:shadow-[0_0_0_3px_var(--asbm-gold-light)]"
           >
             SA
-          </span>
+          </button>
         </div>
       </div>
     </header>

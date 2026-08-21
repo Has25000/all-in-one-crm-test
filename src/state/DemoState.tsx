@@ -6,7 +6,8 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import type { Category } from "../data/types";
+import type { CapturedContact, Category, TimeSlot } from "../data/types";
+import { automations } from "../data/automations";
 
 /**
  * All demo interactivity lives here.
@@ -23,7 +24,13 @@ export type ModalState =
   | { kind: "outreach"; personId: string }
   | { kind: "event"; eventId: string }
   | { kind: "quick-action"; title: string; body: string }
-  | { kind: "client"; clientId: string };
+  | { kind: "client"; clientId: string }
+  | { kind: "my-card" }
+  | { kind: "schedule"; personId: string }
+  | { kind: "capture"; eventId: string }
+  | { kind: "network-event"; eventId: string };
+
+export type ProposedMeeting = { personId: string; slot: TimeSlot };
 
 type State = {
   drawerPersonId: string | null;
@@ -31,6 +38,11 @@ type State = {
   graphFilter: GraphFilter;
   completedTaskIds: string[];
   addedContactIds: string[];
+  /** People captured live during this session, newest first. */
+  captured: CapturedContact[];
+  /** Which automations are switched on. */
+  automationState: Record<string, boolean>;
+  proposedMeetings: ProposedMeeting[];
 };
 
 type Action =
@@ -41,7 +53,11 @@ type Action =
   | { type: "set-graph-filter"; filter: GraphFilter }
   | { type: "complete-task"; taskId: string }
   | { type: "restore-task"; taskId: string }
-  | { type: "add-contact"; personId: string };
+  | { type: "add-contact"; personId: string }
+  | { type: "capture-contact"; contact: CapturedContact }
+  | { type: "update-capture"; id: string; changes: Partial<CapturedContact> }
+  | { type: "toggle-automation"; automationId: string }
+  | { type: "propose-meeting"; meeting: ProposedMeeting };
 
 const initialState: State = {
   drawerPersonId: null,
@@ -49,6 +65,9 @@ const initialState: State = {
   graphFilter: "all",
   completedTaskIds: [],
   addedContactIds: [],
+  captured: [],
+  automationState: Object.fromEntries(automations.map((a) => [a.id, a.defaultOn])),
+  proposedMeetings: [],
 };
 
 function reducer(state: State, action: Action): State {
@@ -78,6 +97,25 @@ function reducer(state: State, action: Action): State {
       return state.addedContactIds.includes(action.personId)
         ? state
         : { ...state, addedContactIds: [...state.addedContactIds, action.personId] };
+    case "capture-contact":
+      return { ...state, captured: [action.contact, ...state.captured] };
+    case "update-capture":
+      return {
+        ...state,
+        captured: state.captured.map((c) =>
+          c.id === action.id ? { ...c, ...action.changes } : c,
+        ),
+      };
+    case "toggle-automation":
+      return {
+        ...state,
+        automationState: {
+          ...state.automationState,
+          [action.automationId]: !state.automationState[action.automationId],
+        },
+      };
+    case "propose-meeting":
+      return { ...state, proposedMeetings: [...state.proposedMeetings, action.meeting] };
     default:
       return state;
   }
@@ -92,6 +130,10 @@ type DemoContextValue = State & {
   completeTask: (taskId: string) => void;
   restoreTask: (taskId: string) => void;
   addContact: (personId: string) => void;
+  captureContact: (contact: CapturedContact) => void;
+  updateCapture: (id: string, changes: Partial<CapturedContact>) => void;
+  toggleAutomation: (automationId: string) => void;
+  proposeMeeting: (meeting: ProposedMeeting) => void;
   isTaskComplete: (taskId: string) => boolean;
 };
 
@@ -111,6 +153,23 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
   const completeTask = useCallback((taskId: string) => dispatch({ type: "complete-task", taskId }), []);
   const restoreTask = useCallback((taskId: string) => dispatch({ type: "restore-task", taskId }), []);
   const addContact = useCallback((personId: string) => dispatch({ type: "add-contact", personId }), []);
+  const captureContact = useCallback(
+    (contact: CapturedContact) => dispatch({ type: "capture-contact", contact }),
+    [],
+  );
+  const updateCapture = useCallback(
+    (id: string, changes: Partial<CapturedContact>) =>
+      dispatch({ type: "update-capture", id, changes }),
+    [],
+  );
+  const toggleAutomation = useCallback(
+    (automationId: string) => dispatch({ type: "toggle-automation", automationId }),
+    [],
+  );
+  const proposeMeeting = useCallback(
+    (meeting: ProposedMeeting) => dispatch({ type: "propose-meeting", meeting }),
+    [],
+  );
 
   const value = useMemo<DemoContextValue>(
     () => ({
@@ -123,9 +182,27 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       completeTask,
       restoreTask,
       addContact,
+      captureContact,
+      updateCapture,
+      toggleAutomation,
+      proposeMeeting,
       isTaskComplete: (taskId: string) => state.completedTaskIds.includes(taskId),
     }),
-    [state, openDrawer, closeDrawer, openModal, closeModal, setGraphFilter, completeTask, restoreTask, addContact],
+    [
+      state,
+      openDrawer,
+      closeDrawer,
+      openModal,
+      closeModal,
+      setGraphFilter,
+      completeTask,
+      restoreTask,
+      addContact,
+      captureContact,
+      updateCapture,
+      toggleAutomation,
+      proposeMeeting,
+    ],
   );
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;

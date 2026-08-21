@@ -111,6 +111,15 @@ export const relationships: Relationship[] = [
   rel("p-victor", "org-salinas", "works-at"),
   rel(SYDNEY_ID, "org-asbm", "works-at"),
 
+  /* Relationships that started in a room, not an inbox */
+  rel(SYDNEY_ID, "p-yara", "brand-partner", "active", "2026-07-09"),
+  rel(SYDNEY_ID, "p-trevor", "brand-partner", "cooling", "2026-06-18"),
+  rel(SYDNEY_ID, "p-colin", "team", "dormant", "2026-06-11"),
+  rel("p-nicole", "p-trevor", "professional", "active"),
+  rel("p-yara", "org-vuori", "works-at"),
+  rel("p-trevor", "org-truist", "works-at"),
+  rel("p-colin", "org-knights", "works-at"),
+
   /* The introduction the dashboard surfaces */
   rel(SYDNEY_ID, "p-jordan-lee", "potential-introduction", "dormant"),
 ];

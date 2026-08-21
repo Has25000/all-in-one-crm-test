@@ -34,6 +34,8 @@ export type Person = {
   lastInteraction?: string;
   firstInteraction?: string;
   connectedThrough?: string;
+  /** Where the relationship actually started — a room, an event, a shared table. */
+  metContext?: string;
   notes?: string[];
   tags?: string[];
 };
@@ -169,4 +171,62 @@ export type SuggestedPath = {
   chain: string[];
   reason: string;
   outcome: string;
+};
+
+export type EventKind = "conference" | "community" | "mixer" | "game" | "summit";
+
+export type NetworkEvent = {
+  id: string;
+  name: string;
+  kind: EventKind;
+  /** ISO dates. Single-day events repeat the same date. */
+  startDate: string;
+  endDate: string;
+  location: string;
+  venue?: string;
+  summary: string;
+  /** People already in the network who will be there. */
+  attendingIds: string[];
+  /** People worth getting in front of while you're in the room. */
+  targetIds: string[];
+  /** Captured at the event — populated for events that have happened. */
+  metIds: string[];
+  relatedClientIds: string[];
+  goals: string[];
+};
+
+export type AutomationCategory = "cadence" | "capture" | "meetings" | "signals";
+
+export type Automation = {
+  id: string;
+  name: string;
+  category: AutomationCategory;
+  /** One line on what it does for Sydney. */
+  description: string;
+  /** The rule in plain terms. */
+  rule: string;
+  /** What it has actually done lately. */
+  status: string;
+  defaultOn: boolean;
+};
+
+/** A contact captured live at an event during this session. */
+export type CapturedContact = {
+  id: string;
+  name: string;
+  title: string;
+  organization: string;
+  location: string;
+  category: Category;
+  eventId: string;
+  method: "badge" | "card" | "qr" | "manual";
+  note?: string;
+  followUp: boolean;
+};
+
+export type TimeSlot = {
+  /** ISO date */
+  date: string;
+  start: number;
+  end: number;
 };

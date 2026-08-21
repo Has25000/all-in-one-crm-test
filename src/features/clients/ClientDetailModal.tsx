@@ -9,6 +9,7 @@ import { NetworkGraph } from "../graph/NetworkGraph";
 import { OpportunityCard } from "../opportunities/OpportunityCard";
 import { useDemoState } from "../../state/DemoState";
 import { SYDNEY_ID } from "../../data/people";
+import { DEMO_TODAY_ISO } from "../../data/today";
 import {
   documentsForClient,
   eventsForClient,
@@ -50,7 +51,7 @@ export function ClientDetailModal() {
 
   const clientPerson = client.personId ? getPerson(client.personId) : undefined;
   const keyPeople = client.keyRelationshipIds.map(getPerson).filter(Boolean);
-  const upcoming = eventsForClient(client.id).filter((e) => e.date >= "2026-08-21");
+  const upcoming = eventsForClient(client.id).filter((e) => e.date >= DEMO_TODAY_ISO);
   const files = documentsForClient(client.id);
   const opportunities = opportunitiesForClient(client.id);
   const activity = client.personId ? interactionsForPerson(client.personId) : [];

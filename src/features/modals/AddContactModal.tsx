@@ -25,7 +25,7 @@ const methods: {
  * to the same enriched result — mocked, but it makes the intent obvious.
  */
 export function AddContactModal() {
-  const { modal, closeModal, addContact } = useDemoState();
+  const { modal, closeModal, addContact, openModal } = useDemoState();
   const [done, setDone] = useState<Method | null>(null);
 
   const open = modal.kind === "add-contact";
@@ -84,6 +84,7 @@ export function AddContactModal() {
           </div>
         </div>
       ) : (
+        <div>
         <div className="grid gap-3 sm:grid-cols-2">
           {methods.map(({ id, icon: Icon, title, copy, action, hint }) => (
             <div
@@ -104,6 +105,15 @@ export function AddContactModal() {
               </Button>
             </div>
           ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => openModal({ kind: "capture", eventId: "ev-clt-summit" })}
+          className="mt-4 w-full rounded-[12px] border border-dashed border-line px-4 py-3 text-left text-[12.5px] text-muted transition-colors duration-200 hover:border-[color:var(--asbm-gold)]/60 hover:text-charcoal"
+        >
+          Meeting people at an event? <span className="font-medium text-ink">Open live capture</span>{" "}
+          — badges, cards, and codes, with everything tagged to the room you met in.
+        </button>
         </div>
       )}
     </Modal>

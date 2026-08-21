@@ -69,6 +69,9 @@ export const FULL_PERSON_IDS = [
   "p-chris",
   "p-victor",
   "p-naomi",
+  "p-yara",
+  "p-trevor",
+  "p-colin",
 ];
 
 export const FULL_ORG_IDS = [

@@ -17,7 +17,7 @@ import { Card, PageHeader } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { cn } from "../components/ui/cn";
 import { useDemoState } from "../state/DemoState";
-import { DEMO_TODAY } from "../data/today";
+import { DEMO_TODAY, DEMO_TODAY_ISO } from "../data/today";
 import { eventCategoryLabel } from "../data/calendar";
 import { calendarEvents, formatHour, getClient, getPerson } from "../data/selectors";
 import type { CalendarEvent, EventCategory } from "../data/types";
@@ -320,7 +320,7 @@ export function CalendarPage() {
         <h2 className="text-[15px] font-semibold text-ink">Coming up next</h2>
         <ul className="mt-3 divide-y divide-[color:var(--asbm-border)]">
           {calendarEvents
-            .filter((e) => e.date >= "2026-08-21")
+            .filter((e) => e.date >= DEMO_TODAY_ISO)
             .slice(0, 5)
             .map((event) => {
               const person = event.participantIds.map(getPerson).filter(Boolean)[0];

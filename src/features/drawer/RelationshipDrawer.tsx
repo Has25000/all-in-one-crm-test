@@ -1,4 +1,4 @@
-import { CalendarPlus, FileText, MessageSquare, NotebookPen, SquareCheck } from "lucide-react";
+import { CalendarPlus, FileText, MapPin, MessageSquare, NotebookPen, SquareCheck } from "lucide-react";
 import { Drawer } from "../../components/ui/Drawer";
 import { Avatar } from "../../components/ui/Avatar";
 import { Button } from "../../components/ui/Button";
@@ -7,8 +7,11 @@ import { StrengthDot } from "../../components/ui/StrengthDot";
 import { useDemoState } from "../../state/DemoState";
 import {
   categoryMeta,
+  dateRangeLabel,
   documentsForPerson,
   dueLabel,
+  eventTimingLabel,
+  eventsInvolving,
   formatDate,
   getClientForPerson,
   getPerson,
@@ -17,7 +20,9 @@ import {
   relatedClients,
   relatedPeople,
   tasksForPerson,
+  touchStatus,
 } from "../../data/selectors";
+import { cadenceLabel } from "../../data/automations";
 import { SYDNEY_ID } from "../../data/people";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -55,6 +60,8 @@ export function RelationshipDrawer() {
   const files = documentsForPerson(person.id);
   const openTasks = tasksForPerson(person.id);
   const asClient = getClientForPerson(person.id);
+  const touch = touchStatus(person);
+  const events = eventsInvolving(person.id);
 
   const quickAction = (title: string, body: string) => openModal({ kind: "quick-action", title, body });
 
@@ -78,9 +85,7 @@ export function RelationshipDrawer() {
           <Button
             size="sm"
             variant="ghost"
-            onClick={() =>
-              quickAction("Scheduling", `Availability with ${person.name} would open here, pulled from your connected calendar.`)
-            }
+            onClick={() => openModal({ kind: "schedule", personId: person.id })}
           >
             <CalendarPlus size={14} aria-hidden />
             Schedule
@@ -137,6 +142,41 @@ export function RelationshipDrawer() {
           <Field label="Met through" value={person.connectedThrough ?? "Direct"} />
           <Field label="Time since contact" value={lastInteractionLabel(person.lastInteraction)} />
         </div>
+
+        {person.metContext && (
+          <p className="mt-3 flex items-start gap-2 rounded-[9px] bg-cream/70 px-3 py-2 text-[12.5px] text-charcoal">
+            <MapPin size={13} className="mt-0.5 shrink-0 text-muted" aria-hidden />
+            Met at {person.metContext}
+          </p>
+        )}
+      </Section>
+
+      {/* Keep in touch */}
+      <Section title="Keep in touch">
+        <div className="flex items-center justify-between gap-3 rounded-[10px] border border-line px-3 py-2.5">
+          <div>
+            <p className="text-[13px] font-medium text-ink">
+              {cadenceLabel[person.relationshipStrength]}
+            </p>
+            <p className="text-[11.5px] text-muted">
+              {touch.nextTouchDate
+                ? `Next check-in ${formatDate(touch.nextTouchDate, "MMMM d")}`
+                : "No contact logged yet"}
+            </p>
+          </div>
+          <span
+            className="shrink-0 rounded-full border px-2.5 py-[3px] text-[11.5px] font-medium"
+            style={{
+              borderColor: touch.overdue
+                ? "color-mix(in srgb, var(--asbm-warning) 45%, transparent)"
+                : "var(--asbm-border)",
+              background: touch.overdue ? "var(--asbm-gold-light)" : "var(--asbm-cream)",
+              color: touch.overdue ? "var(--asbm-black)" : "var(--asbm-muted)",
+            }}
+          >
+            {touch.label}
+          </span>
+        </div>
       </Section>
 
       {/* Contact */}
@@ -185,6 +225,34 @@ export function RelationshipDrawer() {
               </Chip>
             ))}
           </div>
+        </Section>
+      )}
+
+      {events.length > 0 && (
+        <Section title="Rooms you'll share">
+          <ul className="space-y-1.5">
+            {events.map((event) => (
+              <li key={event.id}>
+                <button
+                  type="button"
+                  onClick={() => openModal({ kind: "network-event", eventId: event.id })}
+                  className="flex w-full items-center justify-between gap-3 rounded-[9px] border border-line px-3 py-2 text-left transition-colors duration-200 hover:bg-cream"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-[12.5px] font-medium text-ink">
+                      {event.name}
+                    </span>
+                    <span className="block truncate text-[11px] text-muted">
+                      {dateRangeLabel(event)}
+                    </span>
+                  </span>
+                  <span className="shrink-0 text-[11.5px] text-muted">
+                    {eventTimingLabel(event)}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </Section>
       )}
 

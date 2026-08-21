@@ -10,6 +10,8 @@ import { NetworkHealth } from "../features/dashboard/NetworkHealth";
 import { CategoryMix } from "../features/dashboard/CategoryMix";
 import { SuggestedConnections } from "../features/dashboard/SuggestedConnections";
 import { RecentActivity } from "../features/dashboard/RecentActivity";
+import { UpcomingEvents } from "../features/dashboard/UpcomingEvents";
+import { StayInTouch } from "../features/dashboard/StayInTouch";
 import { ClientCard } from "../features/clients/ClientCard";
 import { OpportunityCard } from "../features/opportunities/OpportunityCard";
 import { NetworkGraph } from "../features/graph/NetworkGraph";
@@ -60,6 +62,11 @@ export function Dashboard() {
           ))}
         </div>
       </Card>
+
+      <div className="grid gap-5 xl:grid-cols-2">
+        <UpcomingEvents />
+        <StayInTouch />
+      </div>
 
       <div className="grid gap-5 xl:grid-cols-3">
         <FollowUps />

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { CalendarDays, FolderOpen, Home, Send, Share2, Users } from "lucide-react";
+import { CalendarDays, FolderOpen, Home, MapPin, Send, Share2, Users } from "lucide-react";
 import { cn } from "../ui/cn";
 
 const navigation = [
@@ -7,6 +7,7 @@ const navigation = [
   { to: "/network", label: "Network", icon: Share2 },
   { to: "/clients", label: "Clients", icon: Users },
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
+  { to: "/events", label: "Events", icon: MapPin },
   { to: "/outreach", label: "Outreach", icon: Send },
   { to: "/documents", label: "Documents", icon: FolderOpen },
 ];

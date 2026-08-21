@@ -1,5 +1,5 @@
-import { differenceInCalendarDays, format, parseISO } from "date-fns";
-import { DEMO_TODAY } from "./today";
+import { addDays, differenceInCalendarDays, format, parseISO } from "date-fns";
+import { DEMO_TODAY, DEMO_TODAY_ISO } from "./today";
 import { people, personById, SYDNEY_ID } from "./people";
 import { organizations, organizationById } from "./organizations";
 import { clients, clientById, clientByPersonId } from "./clients";
@@ -9,14 +9,18 @@ import { opportunities } from "./opportunities";
 import { documents } from "./documents";
 import { calendarEvents } from "./calendar";
 import { tasks } from "./tasks";
+import { networkEvents } from "./events";
+import { keepInTouchCadence } from "./automations";
 import type {
   Category,
   DemoDocument,
+  NetworkEvent,
   Opportunity,
   Person,
   Relationship,
   Strength,
   Task,
+  TimeSlot,
 } from "./types";
 
 /* ------------------------------------------------------------------ *
@@ -188,7 +192,7 @@ export const eventsOn = (iso: string) =>
   calendarEvents.filter((e) => e.date === iso).sort((a, b) => a.start - b.start);
 
 export const upcomingEventsForClient = (clientId: string) =>
-  eventsForClient(clientId).filter((e) => e.date >= "2026-08-21");
+  eventsForClient(clientId).filter((e) => e.date >= DEMO_TODAY_ISO);
 
 /* ------------------------------------------------------------------ *
  * Follow-ups
@@ -252,3 +256,144 @@ export const initialsOf = (name: string) =>
     .join("");
 
 export { SYDNEY_ID, people, organizations, clients, relationships, opportunities, documents, calendarEvents, tasks, interactions };
+
+/* ------------------------------------------------------------------ *
+ * Events
+ * ------------------------------------------------------------------ */
+
+export const getEvent = (id: string) => networkEvents.find((e) => e.id === id);
+
+export const daysUntil = (iso: string) =>
+  differenceInCalendarDays(parseISO(iso), DEMO_TODAY);
+
+/** "Tomorrow" · "In 18 days" · "Last month" */
+export const eventTimingLabel = (event: NetworkEvent) => {
+  const days = daysUntil(event.startDate);
+  if (days === 0) return "Today";
+  if (days === 1) return "Tomorrow";
+  if (days > 1) return `In ${days} days`;
+  if (days === -1) return "Yesterday";
+  return `${Math.abs(days)} days ago`;
+};
+
+export const upcomingEvents = () =>
+  networkEvents
+    .filter((e) => e.endDate >= DEMO_TODAY_ISO)
+    .sort((a, b) => a.startDate.localeCompare(b.startDate));
+
+export const pastEvents = () =>
+  networkEvents
+    .filter((e) => e.endDate < DEMO_TODAY_ISO)
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
+
+/** Events a given person is going to, or came out of. */
+export const eventsInvolving = (personId: string) =>
+  networkEvents.filter(
+    (e) =>
+      e.attendingIds.includes(personId) ||
+      e.targetIds.includes(personId) ||
+      e.metIds.includes(personId),
+  );
+
+export const dateRangeLabel = (event: NetworkEvent) =>
+  event.startDate === event.endDate
+    ? format(parseISO(event.startDate), "EEEE, MMMM d")
+    : `${format(parseISO(event.startDate), "MMMM d")}–${format(parseISO(event.endDate), "d, yyyy")}`;
+
+/* ------------------------------------------------------------------ *
+ * Keeping in touch
+ *
+ * Each relationship tier has a check-in window. These helpers answer the only
+ * question that matters: is this one overdue, and by how much?
+ * ------------------------------------------------------------------ */
+
+export type TouchStatus = {
+  cadenceDays: number;
+  /** Negative means overdue. */
+  dueInDays: number;
+  overdue: boolean;
+  nextTouchDate?: string;
+  label: string;
+};
+
+export const touchStatus = (person: Person): TouchStatus => {
+  const cadenceDays = keepInTouchCadence[person.relationshipStrength];
+
+  if (!person.lastInteraction) {
+    return {
+      cadenceDays,
+      dueInDays: 0,
+      overdue: true,
+      label: "No contact yet",
+    };
+  }
+
+  const next = addDays(parseISO(person.lastInteraction), cadenceDays);
+  const dueInDays = differenceInCalendarDays(next, DEMO_TODAY);
+
+  return {
+    cadenceDays,
+    dueInDays,
+    overdue: dueInDays < 0,
+    nextTouchDate: format(next, "yyyy-MM-dd"),
+    label:
+      dueInDays < 0
+        ? `${Math.abs(dueInDays)} days overdue`
+        : dueInDays === 0
+          ? "Due today"
+          : `Due in ${dueInDays} days`,
+  };
+};
+
+/** Everyone who has slipped past their check-in window, worst first. */
+export const overdueRelationships = () =>
+  people
+    .filter((p) => p.id !== SYDNEY_ID)
+    .map((person) => ({ person, touch: touchStatus(person) }))
+    .filter((row) => row.touch.overdue)
+    .sort((a, b) => a.touch.dueInDays - b.touch.dueInDays);
+
+/* ------------------------------------------------------------------ *
+ * Availability
+ *
+ * Free slots are read straight out of the seeded calendar, so proposing a time
+ * reflects what is actually open rather than a canned list.
+ * ------------------------------------------------------------------ */
+
+const WORK_START = 9;
+const WORK_END = 17;
+
+export const availableSlots = (
+  { days = 10, duration = 0.5, limit = 8 } = {},
+): TimeSlot[] => {
+  const slots: TimeSlot[] = [];
+
+  for (let offset = 1; offset <= days && slots.length < limit; offset++) {
+    const day = addDays(DEMO_TODAY, offset);
+    const weekday = day.getDay();
+    if (weekday === 0 || weekday === 6) continue;
+
+    const iso = format(day, "yyyy-MM-dd");
+    const booked = calendarEvents
+      .filter((e) => e.date === iso)
+      .sort((a, b) => a.start - b.start);
+
+    for (let start = WORK_START; start + duration <= WORK_END; start += 0.5) {
+      if (slots.length >= limit) break;
+      const end = start + duration;
+      const clashes = booked.some((e) => start < e.end && end > e.start);
+      if (clashes) continue;
+
+      slots.push({ date: iso, start, end });
+      // One suggestion per morning and afternoon keeps the list readable.
+      start = start < 12 ? 12.5 : WORK_END;
+    }
+  }
+
+  return slots;
+};
+
+export const slotLabel = (slot: TimeSlot) =>
+  `${format(parseISO(slot.date), "EEEE, MMM d")} · ${formatHour(slot.start)}`;
+
+export { networkEvents };
