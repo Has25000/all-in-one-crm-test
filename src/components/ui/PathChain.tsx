@@ -17,7 +17,7 @@ export function PathChain({
   return (
     <ol
       className={cn(
-        "flex items-center gap-1.5",
+        "flex items-center gap-1",
         vertical ? "flex-col items-start gap-1" : "flex-wrap",
         className,
       )}
@@ -25,11 +25,11 @@ export function PathChain({
       {nodes.map((node, index) => (
         <li
           key={`${node}-${index}`}
-          className={cn("flex items-center gap-1.5", vertical && "w-full")}
+          className={cn("flex items-center gap-1", vertical && "w-full")}
         >
           <span
             className={cn(
-              "rounded-full border px-2.5 py-[3px] text-[12px] font-medium",
+              "rounded-full border px-2 py-[3px] text-[11.5px] font-medium whitespace-nowrap",
               index === 0
                 ? "border-forest/25 bg-forest-light text-forest"
                 : index === nodes.length - 1
@@ -41,7 +41,7 @@ export function PathChain({
           </span>
           {index < nodes.length - 1 && (
             <ArrowRight
-              size={13}
+              size={12}
               aria-hidden
               className={cn("shrink-0 text-muted", vertical && "rotate-90")}
             />

@@ -146,10 +146,6 @@
 .react-flow__node {
   cursor: pointer;
 }
-/* Organizations are context, not destinations — no click affordance. */
-.react-flow__node-org {
-  cursor: default;
-}
 .react-flow__edge-path {
   transition: stroke 180ms ease, stroke-width 180ms ease;
 }
